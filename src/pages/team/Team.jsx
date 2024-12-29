@@ -28,7 +28,7 @@ export default function Team() {
   );
 
   useEffect(() => {
-    const data = fetchData("partners");
+    const data = fetchData("team");
   }, []);
 
   const onClose = () => {
@@ -36,7 +36,7 @@ export default function Team() {
   };
 
   const onSubmit = (formData) => {
-    postData('partners', formData);
+    postData('team', formData);
   };
 
   return (

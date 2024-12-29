@@ -27,7 +27,7 @@ export default function Testimonials() {
   );
 
   useEffect(() => {
-    const data = fetchData("partners");
+    const data = fetchData("testimonials");
   }, []);
 
   const onClose = () => {
@@ -35,7 +35,7 @@ export default function Testimonials() {
   };
 
   const onSubmit = (formData) => {
-    postData('partners', formData);
+    postData('testimonials', formData);
   };
 
   return (

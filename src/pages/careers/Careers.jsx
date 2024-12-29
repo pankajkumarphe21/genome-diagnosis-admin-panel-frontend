@@ -34,7 +34,12 @@ export default function Careers() {
   );
 
   useEffect(() => {
-    const data = fetchData("careers");
+    const fetchDataAsync = async () => {
+      const data = await fetchData("careers");
+      console.log(data);
+      setRows(data);
+    };
+    fetchDataAsync();
   }, []);
 
   const onClose = () => {

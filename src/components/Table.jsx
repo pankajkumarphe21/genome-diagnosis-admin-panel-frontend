@@ -9,7 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-
+import { Avatar } from "@mui/material";
 
 
 export default function STable({ columns, rows }) {
@@ -44,9 +44,7 @@ export default function STable({ columns, rows }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
+            {rows?.map((row) => {
                 return (
                   <TableRow
                     hover
@@ -54,14 +52,20 @@ export default function STable({ columns, rows }) {
                     tabIndex={-1}
                     key={row.code}>
                     {columns.map((column) => {
-                      const value = row[column.id];
+                      const value =
+                        column.id === "photo" ? row.photo : row[column.id];
                       return (
                         <TableCell
                           key={column.id}
                           align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
+                          {column.id === "photo" ? (
+                            <Avatar
+                              alt="User Photo"
+                              src={value}
+                            />
+                          ) : (
+                            value
+                          )}
                         </TableCell>
                       );
                     })}
