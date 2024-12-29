@@ -16,7 +16,16 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useNavigate } from "react-router-dom";
 
-const pages = ["Blogs", "Careers", "Events", "Contact Us", 'news', 'partners', 'team', 'testimonials'];
+const pages = [
+  { text: "Blogs", link: "/blogs" },
+  { text: "Careers", link: "/careers" },
+  { text: "Events", link: "/events" },
+  { text: "Contact Us", link: "/contact-us" },
+  { text: "News", link: "/news" },
+  { text: "Partners", link: "/partners" },
+  { text: "Team", link: "/team" },
+  { text: "Testimonials", link: "/testimonials" }
+];
 const settings = ["Profile", "Dashboard", "Logout"];
 
 function Header() {
@@ -31,8 +40,8 @@ function Header() {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
-    
+  const handleCloseNavMenu = (link) => {
+    navigate(link);
     setAnchorElNav(null);
   };
 
@@ -88,9 +97,9 @@ function Header() {
               sx={{ display: { xs: "block", md: "none" } }}>
               {pages.map((page) => (
                 <MenuItem
-                  key={page}
-                  onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                  key={page.text}
+                  onClick={() => handleCloseNavMenu(page.link)}>
+                  <Typography sx={{ textAlign: "center" }}>{page.text}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -116,10 +125,10 @@ function Header() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={() =>handleCloseNavMenu()}
+                key={page.text}
+                onClick={() =>handleCloseNavMenu(page.link)}
                 sx={{ my: 2, color: "white", display: "block" }}>
-                {page}
+                {page.text}
               </Button>
             ))}
           </Box>

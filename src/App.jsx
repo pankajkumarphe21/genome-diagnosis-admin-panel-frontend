@@ -28,7 +28,7 @@ export default function App() {
         <Route path="/partners" element={<Partners />} />
         <Route path="/careers" element={<Careers />} />
         <Route path="/testimonials" element={<Testimonials />} />
-        <Route path="/contact-us-details" element={<ContactUsDetails />} />
+        <Route path="/contact-us" element={<ContactUsDetails />} />
         <Route path="/blogs" element={<Blogs />} />
       </Routes>
     </BrowserRouter>

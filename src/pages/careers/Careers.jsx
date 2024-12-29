@@ -14,6 +14,7 @@ export default function Careers() {
   const [rows, setRows] = React.useState([]);
 
   const form = {
+    photo : "",
     designation: "",
     description: "",
     location: "",
@@ -46,14 +47,17 @@ export default function Careers() {
 
   return (
     <div>
-      <STable rows={rows} columns={columns}></STable>
       <Button
         variant="contained"
         color="primary"
-        onClick={() => setOpen(true)}>
+        onClick={() => setOpen(true)}
+        sx={{ margin: 2 }}>
         {" "}
         Add New{" "}
       </Button>
+      <STable
+        rows={rows}
+        columns={columns}></STable>
       <FormDialog
         form={form}
         open={open}
