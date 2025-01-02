@@ -28,8 +28,12 @@ export default function Partners() {
   );
 
   useEffect(() => {
-    const data = fetchData("partners");
-  }, []);
+    const fetchDataAsync = async () => {
+      const data = await fetchData("partners");
+      setRows(data);
+    };
+    fetchDataAsync();
+  }, [form]);
 
   const onClose = () => {
     setOpen(false);

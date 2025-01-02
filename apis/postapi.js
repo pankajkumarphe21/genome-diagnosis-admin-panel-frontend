@@ -1,6 +1,7 @@
 const baseUrl = import.meta.env.VITE_HOST_API;
 
 const postData = async (extra, data) => {
+    console.log(data)
     try {
         const response = await fetch(`${baseUrl}/${extra}`, {
             method: 'POST',

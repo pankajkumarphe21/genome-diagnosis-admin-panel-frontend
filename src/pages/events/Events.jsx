@@ -1,5 +1,3 @@
-/** @format */
-
 import React, { useEffect } from "react";
 import fetchData from "../../../apis/getapis";
 import { Button } from "@mui/material";
@@ -14,31 +12,31 @@ export default function Events() {
   const [rows, setRows] = React.useState([]);
 
   const form = {
-    photo: "",
-    manager: "",
+    photo : "",
+    manager : "",
     email: "",
     contact: "",
     venue: "",
-    time: "",
+    time : "",
     description: "",
   };
 
-  const [columns, setColumns] = React.useState([
-    ...Object.keys(data[0] || {}).map((key) => ({
+  const [columns, setColumns] = React.useState(
+    Object.keys(form).map((key) => ({
       id: key,
       label: key.charAt(0).toUpperCase() + key.slice(1),
       minWidth: 170,
       align: "left",
-    })),
-    {
-      id: "photo",
-      label: "Photo",
-      minWidth: 100,
-      align: "center",
-    },
-  ]);
+    }))
+  );
+
   useEffect(() => {
-    const data = fetchData("events");
+    const fetchDataAsync = async () => {
+      const data = await fetchData("events");
+      setRows(data);
+    };
+
+    fetchDataAsync();
   }, []);
 
   const onClose = () => {
@@ -46,7 +44,7 @@ export default function Events() {
   };
 
   const onSubmit = (formData) => {
-    postData("blogs", formData);
+    postData('events', formData);
   };
 
   return (

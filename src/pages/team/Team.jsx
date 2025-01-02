@@ -8,6 +8,7 @@ import STable from "../../components/Table";
 export default function Team() {
   const [list, setList] = React.useState([]);
   const [open, setOpen] = React.useState(false);
+  const [tey, setTey] = React.useState("");
 
   const [rows, setRows] = React.useState([]);
 
@@ -28,14 +29,20 @@ export default function Team() {
   );
 
   useEffect(() => {
-    const data = fetchData("team");
-  }, []);
+    const fetchDataAsync = async () => {
+      const data = await fetchData("team");
+      setRows(data);
+    };
+
+    fetchDataAsync();
+  }, [tey]);
 
   const onClose = () => {
     setOpen(false);
   };
 
   const onSubmit = (formData) => {
+    setTey(JSON.stringify(formData));
     postData('team', formData);
   };
 

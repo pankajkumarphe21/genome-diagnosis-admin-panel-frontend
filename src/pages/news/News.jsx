@@ -30,15 +30,19 @@ export default function News() {
   );
 
   useEffect(() => {
-    const data = fetchData("news");
-  }, []);
+    const fetchDataAsync = async () => {
+      const data = await fetchData("news");
+      setRows(data);
+    };
+    fetchDataAsync();
+  }, [form]);
 
   const onClose = () => {
     setOpen(false);
   };
 
   const onSubmit = (formData) => {
-    postData('blogs', formData);
+    postData('news', formData);
   };
 
   return (

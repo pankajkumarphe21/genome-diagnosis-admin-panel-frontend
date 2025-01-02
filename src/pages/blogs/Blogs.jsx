@@ -14,8 +14,9 @@ export default function Blogs() {
   const form = {
     photo : "",
     name : "",
-    designation: "",
-    testimonial: "",
+    editor: "",
+    date: "",
+    description : "",
   };
 
   const [columns, setColumns] = React.useState(
@@ -28,7 +29,11 @@ export default function Blogs() {
   );
 
   useEffect(() => {
-    const data = fetchData("blogs");
+    const fetchDataAsync = async () => {
+      const data = await fetchData("blogs");
+      setRows(data);
+    };
+    fetchDataAsync();
   }, []);
 
   const onClose = () => {
