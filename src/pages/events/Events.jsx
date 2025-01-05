@@ -31,7 +31,12 @@ export default function Events() {
   );
 
   useEffect(() => {
-    const data = fetchData("events");
+    const fetchDataAsync = async () => {
+      const data = await fetchData("events");
+      setRows(data);
+    };
+
+    fetchDataAsync();
   }, []);
 
   const onClose = () => {
@@ -39,7 +44,7 @@ export default function Events() {
   };
 
   const onSubmit = (formData) => {
-    postData('blogs', formData);
+    postData('events', formData);
   };
 
   return (
@@ -54,7 +59,7 @@ export default function Events() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns} extra={"events"}></STable>
       <FormDialog
         form={form}
         open={open}
@@ -64,5 +69,3 @@ export default function Events() {
     </div>
   );
 }
-
-

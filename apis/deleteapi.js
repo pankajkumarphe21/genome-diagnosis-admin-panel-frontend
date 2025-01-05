@@ -1,14 +1,14 @@
 const baseUrl = import.meta.env.VITE_HOST_API;
 
-const postData = async (extra, data) => {
-    console.log(data)
+const deleteData = async (extra, id) => {
+    console.log(id)
     try {
         const response = await fetch(`${baseUrl}/${extra}`, {
-            method: 'POST',
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify({id}),
         });
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -20,4 +20,4 @@ const postData = async (extra, data) => {
     }
 }
 
-export default postData;
+export { deleteData };

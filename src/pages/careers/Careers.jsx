@@ -34,7 +34,12 @@ export default function Careers() {
   );
 
   useEffect(() => {
-    const data = fetchData("careers");
+    const fetchDataAsync = async () => {
+      const data = await fetchData("careers");
+      console.log(data);
+      setRows(data);
+    };
+    fetchDataAsync();
   }, []);
 
   const onClose = () => {
@@ -57,7 +62,8 @@ export default function Careers() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns}
+        extra={"careers"}></STable>
       <FormDialog
         form={form}
         open={open}

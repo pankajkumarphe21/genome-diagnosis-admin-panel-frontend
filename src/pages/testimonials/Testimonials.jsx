@@ -14,6 +14,7 @@ export default function Testimonials() {
     photo : "",
     name : "",
     designation : "",
+    company : "",
     comment: "",
   };
 
@@ -27,15 +28,19 @@ export default function Testimonials() {
   );
 
   useEffect(() => {
-    const data = fetchData("partners");
-  }, []);
+    const fetchDataAsync = async () => {
+      const data = await fetchData("testimonials");
+      setRows(data);
+    }
+    fetchDataAsync();
+  }, [form]);
 
   const onClose = () => {
     setOpen(false);
   };
 
   const onSubmit = (formData) => {
-    postData('partners', formData);
+    postData('testimonials', formData);
   };
 
   return (
@@ -50,7 +55,8 @@ export default function Testimonials() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns}
+        extra={"testimonials"}></STable>
       <FormDialog
         form={form}
         open={open}

@@ -14,8 +14,9 @@ export default function Blogs() {
   const form = {
     photo : "",
     name : "",
-    designation: "",
-    testimonial: "",
+    editor: "",
+    date: "",
+    description : "",
   };
 
   const [columns, setColumns] = React.useState(
@@ -28,7 +29,11 @@ export default function Blogs() {
   );
 
   useEffect(() => {
-    const data = fetchData("blogs");
+    const fetchDataAsync = async () => {
+      const data = await fetchData("blogs");
+      setRows(data);
+    };
+    fetchDataAsync();
   }, []);
 
   const onClose = () => {
@@ -45,11 +50,14 @@ export default function Blogs() {
         variant="contained"
         color="primary"
         onClick={() => setOpen(true)}
-        sx={{margin: 2}}>
+        sx={{ margin: 2 }}>
         {" "}
         Add New{" "}
       </Button>
-      <STable rows={rows} columns={columns}></STable>
+      <STable
+        rows={rows}
+        columns={columns}
+        extra={"blogs"}></STable>
       <FormDialog
         form={form}
         open={open}
@@ -57,7 +65,7 @@ export default function Blogs() {
         onSubmit={onSubmit}
       />
     </div>
-  )
+  );
 }
 
 

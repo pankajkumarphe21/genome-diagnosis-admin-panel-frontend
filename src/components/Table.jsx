@@ -9,10 +9,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { Avatar, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { deleteData } from "../../apis/deleteapi";
 
-
-
-export default function STable({ columns, rows }) {
+export default function STable({ columns, rows, extra }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -24,6 +25,10 @@ export default function STable({ columns, rows }) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const onDelete = (id) => {
+    deleteData(extra, id);
+  }
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -41,33 +46,43 @@ export default function STable({ columns, rows }) {
                   {column.label}
                 </TableCell>
               ))}
+              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+            {rows?.map((row, rowIndex) => (
+              <TableRow
+                hover
+                role="checkbox"
+                tabIndex={-1}
+                key={row.code}>
+                {columns.map((column) => {
+                  const value =
+                    column.id === "photo" ? row.photo : row[column.id];
+                  return (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}>
+                      {column.id === "photo" ? (
+                        <Avatar
+                          alt="User Photo"
+                          src={value}
+                        />
+                      ) : (
+                        value
+                      )}
+                    </TableCell>
+                  );
+                })}
+                <TableCell align="center">
+                  <IconButton
+                    color="error"
+                    onClick={() => onDelete(row?._id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

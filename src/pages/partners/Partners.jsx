@@ -28,8 +28,12 @@ export default function Partners() {
   );
 
   useEffect(() => {
-    const data = fetchData("partners");
-  }, []);
+    const fetchDataAsync = async () => {
+      const data = await fetchData("partners");
+      setRows(data);
+    };
+    fetchDataAsync();
+  }, [form]);
 
   const onClose = () => {
     setOpen(false);
@@ -51,7 +55,8 @@ export default function Partners() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns}
+        extra={"partners"}></STable>
       <FormDialog
         form={form}
         open={open}
