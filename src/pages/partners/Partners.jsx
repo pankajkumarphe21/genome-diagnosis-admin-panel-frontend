@@ -55,7 +55,8 @@ export default function Partners() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns}
+        extra={"partners"}></STable>
       <FormDialog
         form={form}
         open={open}

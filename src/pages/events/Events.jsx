@@ -59,7 +59,7 @@ export default function Events() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns} extra={"events"}></STable>
       <FormDialog
         form={form}
         open={open}

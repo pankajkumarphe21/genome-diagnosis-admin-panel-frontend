@@ -50,11 +50,14 @@ export default function Blogs() {
         variant="contained"
         color="primary"
         onClick={() => setOpen(true)}
-        sx={{margin: 2}}>
+        sx={{ margin: 2 }}>
         {" "}
         Add New{" "}
       </Button>
-      <STable rows={rows} columns={columns}></STable>
+      <STable
+        rows={rows}
+        columns={columns}
+        extra={"blogs"}></STable>
       <FormDialog
         form={form}
         open={open}
@@ -62,7 +65,7 @@ export default function Blogs() {
         onSubmit={onSubmit}
       />
     </div>
-  )
+  );
 }
 
 

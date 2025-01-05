@@ -55,7 +55,8 @@ export default function Testimonials() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns}
+        extra={"testimonials"}></STable>
       <FormDialog
         form={form}
         open={open}

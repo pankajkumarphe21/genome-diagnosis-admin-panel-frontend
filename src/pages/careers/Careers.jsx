@@ -62,7 +62,8 @@ export default function Careers() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns}
+        extra={"careers"}></STable>
       <FormDialog
         form={form}
         open={open}

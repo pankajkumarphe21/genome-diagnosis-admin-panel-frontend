@@ -58,7 +58,8 @@ export default function Team() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns}
+        extra={"team"}></STable>
       <FormDialog
         form={form}
         open={open}

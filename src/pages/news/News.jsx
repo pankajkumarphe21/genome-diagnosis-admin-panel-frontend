@@ -57,7 +57,7 @@ export default function News() {
       </Button>
       <STable
         rows={rows}
-        columns={columns}></STable>
+        columns={columns} extra={"news"}></STable>
       <FormDialog
         form={form}
         open={open}
