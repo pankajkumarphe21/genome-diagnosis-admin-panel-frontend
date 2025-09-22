@@ -1,45 +1,57 @@
 /** @format */
 
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import ScienceIcon from "@mui/icons-material/Science";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Box,
+  Container,
+  useTheme,
+  useMediaQuery,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Menu,
+  MenuItem
+} from '@mui/material';
+import Science from "@mui/icons-material/Science";
+import {
+  Menu as MenuIcon,
+  Home,
+  Article,
+  Work,
+  Event,
+  Newspaper,
+  Business,
+  Group,
+  RateReview,
+  ContactSupport
+} from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import ThemeToggle from '../ThemeToggle';
 
 const pages = [
   { text: "Home", link: "/" },
-  { text: "Services", link: "/services" },
-  { text: "Research", link: "/research" },
   { text: "Team", link: "/team" },
   { text: "News", link: "/news" },
   { text: "Events", link: "/events" },
   { text: "Partners", link: "/partners" },
   { text: "Careers", link: "/careers" },
-  { text: "Contact", link: "/contact-us" }
+  { text: "Contact", link: "/contact-us" },
+  { text: "Blogs", link: "/blogs" }
 ];
 
-const settings = ["Profile", "Dashboard", "Logout"];
-
-function Header() {
+function PublicHeader() {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = (link) => {
@@ -47,8 +59,8 @@ function Header() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleAdminLogin = () => {
+    navigate('/login');
   };
 
   return (
@@ -62,7 +74,7 @@ function Header() {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <ScienceIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1, color: 'secondary.main' }} />
+          <Science sx={{ display: { xs: "none", md: "flex" }, mr: 1, color: '#fbbf24' }} />
           <Typography
             variant="h6"
             noWrap
@@ -118,7 +130,7 @@ function Header() {
             </Menu>
           </Box>
           
-          <ScienceIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1, color: 'secondary.main' }} />
+          <Science sx={{ display: { xs: "flex", md: "none" }, mr: 1, color: '#fbbf24' }} />
           <Typography
             variant="h6"
             noWrap
@@ -147,7 +159,7 @@ function Header() {
                 onClick={() => handleCloseNavMenu(page.link)}
                 sx={{ 
                   my: 2, 
-                  color: "white", 
+                  color: "green", 
                   display: "block",
                   mx: 1,
                   '&:hover': {
@@ -160,52 +172,29 @@ function Header() {
             ))}
           </Box>
           
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton
-                onClick={handleOpenUserMenu}
-                sx={{ p: 0 }}>
-                <Avatar
-                  alt="User Profile"
-                  sx={{ 
-                    backgroundColor: 'secondary.main',
-                    color: 'primary.main',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  U
-                </Avatar>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', gap: 1 }}>
+            <ThemeToggle />
+            <Button
+              variant="outlined"
+              onClick={handleAdminLogin}
+              sx={{
+                color: '#fbbf24',
+                borderColor: '#fbbf24',
+                '&:hover': {
+                  borderColor: '#f59e0b',
+                  backgroundColor: 'rgba(251, 191, 36, 0.1)'
+                }
               }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}>
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting}
-                  onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+            >
+              Admin Login
+            </Button>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
-export default Header;
+
+export default PublicHeader;
+
+

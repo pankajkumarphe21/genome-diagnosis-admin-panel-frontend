@@ -1,141 +1,255 @@
 /** @format */
 
-import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Box,
-  Paper,
-  CircularProgress,
-} from "@mui/material";
+import React, { useEffect } from "react";
+import fetchData from "../../../apis/getapis";
+import { Typography, Box, Grid, Card, CardContent, CircularProgress, Chip, Link } from "@mui/material";
+import { Phone, Email, LocationOn, Schedule, Business, LinkedIn, Twitter, Facebook, Instagram } from "@mui/icons-material";
 
 export default function ContactUsDetails() {
-  const [contactDetails, setContactDetails] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = React.useState(true);
+  const [contactInfo, setContactInfo] = React.useState({});
 
   useEffect(() => {
-    fetch("/api/contact-details")
-      .then((response) => response.json())
-      .then((data) => {
-        setContactDetails(data);
-        setFormData({
-          name: data.name,
-          email: data.email,
-          message: data.message,
-        });
+    const fetchDataAsync = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchData("contact-us-details");
+        // Get the first contact detail or use empty object as fallback
+        setContactInfo(Array.isArray(data) && data.length > 0 ? data[0] : {});
+      } catch (error) {
+        console.error("Error fetching contact details:", error);
+        setContactInfo({});
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+    fetchDataAsync();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  const renderBusinessHours = (businessHours) => {
+    if (!businessHours) return null;
+    
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    
+    return (
+      <Box>
+        {days.map((day) => (
+          <Box key={day} sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+            <Typography variant="body2" sx={{ textTransform: 'capitalize', fontWeight: 500 }}>
+              {day}:
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {businessHours[day] || 'Closed'}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    );
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log("Updated Details:", formData);
+  const renderDepartments = (departments) => {
+    if (!departments || departments.length === 0) return null;
+    
+    const deptArray = Array.isArray(departments) ? departments : departments.split(',').map(dept => dept.trim());
+    
+    return (
+      <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+        {deptArray.map((dept, index) => (
+          <Chip
+            key={index}
+            label={dept}
+            size="small"
+            variant="outlined"
+            sx={{ fontSize: '0.75rem' }}
+          />
+        ))}
+      </Box>
+    );
+  };
+
+  const renderSocialMedia = (socialMedia) => {
+    if (!socialMedia) return null;
+    
+    const links = [];
+    if (socialMedia.linkedin) {
+      links.push(
+        <Link key="linkedin" href={socialMedia.linkedin} target="_blank" rel="noopener noreferrer">
+          <LinkedIn sx={{ color: '#0077b5', fontSize: '2rem' }} />
+        </Link>
+      );
+    }
+    if (socialMedia.twitter) {
+      links.push(
+        <Link key="twitter" href={socialMedia.twitter} target="_blank" rel="noopener noreferrer">
+          <Twitter sx={{ color: '#1DA1F2', fontSize: '2rem' }} />
+        </Link>
+      );
+    }
+    if (socialMedia.facebook) {
+      links.push(
+        <Link key="facebook" href={socialMedia.facebook} target="_blank" rel="noopener noreferrer">
+          <Facebook sx={{ color: '#1877F2', fontSize: '2rem' }} />
+        </Link>
+      );
+    }
+    if (socialMedia.instagram) {
+      links.push(
+        <Link key="instagram" href={socialMedia.instagram} target="_blank" rel="noopener noreferrer">
+          <Instagram sx={{ color: '#E4405F', fontSize: '2rem' }} />
+        </Link>
+      );
+    }
+    
+    return links.length > 0 ? (
+      <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+        {links}
+      </Box>
+    ) : null;
   };
 
   if (loading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh">
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
         <CircularProgress />
       </Box>
     );
   }
 
   return (
-    <Container maxWidth="sm">
-      <Paper
-        elevation={3}
-        sx={{ padding: 4, marginTop: 4 }}>
-        <Typography
-          variant="h4"
-          gutterBottom>
-          Contact Details
+    <Box sx={{ p: 3, backgroundColor: 'background.default', minHeight: '100vh' }}>
+      <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'primary.main', mb: 2 }}>
+          Contact Information & Support
         </Typography>
-        <Box sx={{ marginBottom: 2 }}>
-          <Typography variant="body1">
-            <strong>Name:</strong> {contactDetails.name}
-          </Typography>
-          <Typography variant="body1">
-            <strong>Email:</strong> {contactDetails.email}
-          </Typography>
-          <Typography variant="body1">
-            <strong>Message:</strong> {contactDetails.message}
-          </Typography>
-        </Box>
+        <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 700, mx: 'auto' }}>
+          Get in touch with us for any questions, support, or collaboration opportunities
+        </Typography>
+      </Box>
 
-        <Typography
-          variant="h5"
-          gutterBottom>
-          Edit Contact Details
+      {/* Contact Information Display */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%', transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 8px 25px rgba(0,0,0,0.15)' } }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Phone />
+                Contact Numbers
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                <strong>Main:</strong> {contactInfo.phoneNumber || 'N/A'}
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                <strong>Emergency:</strong> {contactInfo.emergencyPhone || 'N/A'}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} md={6}>
+          <Card sx={{ height: '100%', transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 8px 25px rgba(0,0,0,0.15)' } }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Email />
+                Email & Address
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                <strong>Email:</strong> {contactInfo.email || 'N/A'}
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                <strong>Address:</strong> {contactInfo.address || 'N/A'}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      {/* Additional Information */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        {contactInfo.city && (
+          <Grid item xs={12} md={4}>
+            <Card sx={{ height: '100%', transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 8px 25px rgba(0,0,0,0.15)' } }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <LocationOn />
+                  Location
+                </Typography>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  <strong>City:</strong> {contactInfo.city}
+                </Typography>
+                {contactInfo.state && (
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>State:</strong> {contactInfo.state}
+                  </Typography>
+                )}
+                {contactInfo.zipCode && (
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>ZIP Code:</strong> {contactInfo.zipCode}
+                  </Typography>
+                )}
+                {contactInfo.country && (
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    <strong>Country:</strong> {contactInfo.country}
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+
+        {contactInfo.businessHours && (
+          <Grid item xs={12} md={4}>
+            <Card sx={{ height: '100%', transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 8px 25px rgba(0,0,0,0.15)' } }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Schedule />
+                  Business Hours
+                </Typography>
+                {renderBusinessHours(contactInfo.businessHours)}
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+
+        {contactInfo.departments && (
+          <Grid item xs={12} md={4}>
+            <Card sx={{ height: '100%', transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 8px 25px rgba(0,0,0,0.15)' } }}>
+              <CardContent>
+                <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Business />
+                  Departments
+                </Typography>
+                {renderDepartments(contactInfo.departments)}
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+      </Grid>
+
+      {/* Social Media */}
+      {contactInfo.socialMedia && (
+        <Card sx={{ mb: 4, transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out', '&:hover': { transform: 'translateY(-4px)', boxShadow: '0 8px 25px rgba(0,0,0,0.15)' } }}>
+          <CardContent>
+            <Typography variant="h6" sx={{ mb: 2, color: 'primary.main', fontWeight: 'bold' }}>
+              Connect With Us
+            </Typography>
+            {renderSocialMedia(contactInfo.socialMedia)}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Contact Form CTA */}
+      <Card sx={{ textAlign: 'center', p: 4, backgroundColor: 'primary.main', color: 'white' }}>
+        <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
+          Need Help?
         </Typography>
-        <form onSubmit={handleSubmit}>
-          <Box sx={{ marginBottom: 2 }}>
-            <TextField
-              fullWidth
-              label="Name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              variant="outlined"
-            />
-          </Box>
-          <Box sx={{ marginBottom: 2 }}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              variant="outlined"
-              type="email"
-            />
-          </Box>
-          <Box sx={{ marginBottom: 2 }}>
-            <TextField
-              fullWidth
-              label="Message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              variant="outlined"
-              multiline
-              rows={4}
-            />
-          </Box>
-          <Box textAlign="center">
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              size="large">
-              Save
-            </Button>
-          </Box>
-        </form>
-      </Paper>
-    </Container>
+        <Typography variant="body1" sx={{ mb: 3 }}>
+          Can't find what you're looking for? Our team is here to help you with any questions or concerns.
+        </Typography>
+        <Typography variant="body2">
+          <strong>Email us:</strong> {contactInfo.email || 'info@healthcare.com'} | 
+          <strong> Call us:</strong> {contactInfo.phoneNumber || '+1 (555) 123-4567'}
+        </Typography>
+      </Card>
+    </Box>
   );
 }

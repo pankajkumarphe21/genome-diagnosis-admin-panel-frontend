@@ -1,13 +1,12 @@
 const baseUrl = import.meta.env.VITE_HOST_API;
 
-const postData = async (extra, data, customHeaders = {}) => {
-    console.log(`${baseUrl}/${extra}`)
+const putData = async (extra, data) => {
+    console.log(data)
     try {
         const response = await fetch(`${baseUrl}/${extra}`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                ...customHeaders,
             },
             body: JSON.stringify(data),
         });
@@ -17,8 +16,10 @@ const postData = async (extra, data, customHeaders = {}) => {
         const responseData = await response.json();
         return responseData;
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error updating data:", error);
     }
 }
 
-export default postData;
+export default putData;
+
+

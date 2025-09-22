@@ -17,6 +17,9 @@ export default function STable({ columns, rows, extra }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  // Ensure rows is always an array
+  const safeRows = rows || [];
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -50,12 +53,12 @@ export default function STable({ columns, rows, extra }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows?.map((row, rowIndex) => (
+            {safeRows.map((row, rowIndex) => (
               <TableRow
                 hover
                 role="checkbox"
                 tabIndex={-1}
-                key={row.code}>
+                key={row._id || rowIndex}>
                 {columns.map((column) => {
                   const value =
                     column.id === "photo" ? row.photo : row[column.id];
@@ -89,7 +92,7 @@ export default function STable({ columns, rows, extra }) {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={safeRows.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
